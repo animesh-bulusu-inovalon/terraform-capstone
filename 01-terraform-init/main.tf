@@ -12,6 +12,11 @@ resource "aws_s3_object" "_01_tf_init" {
   key    = "01-terraform-init/"
 }
 
+resource "aws_s3_object" "_02_vpc" {
+    bucket = aws_s3_bucket.terraform_state.id
+    key = "02-vpc/"    
+}
+
 resource "aws_iam_policy" "tf_s3_backend_policy" {
   name        = "terraform-s3-backend-policy-v4"
   path        = "/"
