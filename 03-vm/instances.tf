@@ -21,6 +21,10 @@ resource "aws_launch_template" "blue" {
       Name = "blue-instance"
     }
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_launch_template" "green" {
@@ -45,6 +49,10 @@ resource "aws_launch_template" "green" {
     tags = {
       Name = "green-instance"
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
