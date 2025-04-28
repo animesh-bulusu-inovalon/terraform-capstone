@@ -7,16 +7,6 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
-resource "aws_s3_object" "_01_tf_init" {
-  bucket = aws_s3_bucket.terraform_state.id
-  key    = "01-terraform-init/"
-}
-
-resource "aws_s3_object" "_02_vpc" {
-    bucket = aws_s3_bucket.terraform_state.id
-    key = "02-vpc/"    
-}
-
 resource "aws_iam_policy" "tf_s3_backend_policy" {
   name        = "terraform-s3-backend-policy-v4"
   path        = "/"
@@ -50,4 +40,19 @@ resource "aws_s3_bucket_public_access_block" "terraform_state_block" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+}
+
+resource "aws_s3_object" "_01_tf_init" {
+  bucket = aws_s3_bucket.terraform_state.id
+  key    = "01-terraform-init/"
+}
+
+resource "aws_s3_object" "_02_vpc" {
+    bucket = aws_s3_bucket.terraform_state.id
+    key = "02-vpc/"    
+}
+
+resource "aws_s3_object" "_03_vm" {
+    bucket = aws_s3_bucket.terraform_state.id
+    key = "03-vm/"    
 }

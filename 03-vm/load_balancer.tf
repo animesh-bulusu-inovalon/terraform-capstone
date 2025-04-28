@@ -3,7 +3,7 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [aws_subnet.public.id, aws_subnet.private.id]
+  subnets            = [data.terraform_remote_state.vpc_main.outputs.public_subnet_id, data.terraform_remote_state.vpc_main.outputs.private_subnet_id]
 
   enable_deletion_protection = false
 
@@ -16,7 +16,7 @@ resource "aws_lb_target_group" "blue" {
   name     = "blue-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+  vpc_id   = data.terraform_remote_state.vpc_main.outputs.vpc_id
 
   health_check {
     enabled             = true
@@ -38,7 +38,7 @@ resource "aws_lb_target_group" "green" {
   name     = "green-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+  vpc_id   = data.terraform_remote_state.vpc_main.outputs.vpc_id
 
   health_check {
     enabled             = true
@@ -67,7 +67,6 @@ resource "aws_lb_listener" "front_end" {
   }
 }
 
-# Use this resource to switch traffic between blue and green
 resource "aws_lb_listener_rule" "static" {
   listener_arn = aws_lb_listener.front_end.arn
   priority     = 100

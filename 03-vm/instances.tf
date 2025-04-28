@@ -1,7 +1,7 @@
 resource "aws_launch_template" "blue" {
   name_prefix   = "blue-"
-  image_id      = "ami-02d0b04e8c50472ce" # Debian 11 for eu-north-1
-  instance_type = "t3.micro"              # Smallest general purpose instance
+  image_id      = "ami-02d0b04e8c50472ce"
+  instance_type = "t3.micro"
 
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
 
@@ -25,8 +25,8 @@ resource "aws_launch_template" "blue" {
 
 resource "aws_launch_template" "green" {
   name_prefix   = "green-"
-  image_id      = "ami-02d0b04e8c50472ce" # Debian 11 for eu-north-1
-  instance_type = "t3.micro"              # Smallest general purpose instance
+  image_id      = "ami-02d0b04e8c50472ce"
+  instance_type = "t3.micro"
 
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
 
@@ -50,7 +50,7 @@ resource "aws_launch_template" "green" {
 
 resource "aws_autoscaling_group" "blue" {
   name                = "blue-asg"
-  vpc_zone_identifier = [aws_subnet.public.id]
+  vpc_zone_identifier = [data.terraform_remote_state.vpc_main.outputs.public_subnet_id]
   desired_capacity    = 1
   max_size            = 1
   min_size            = 1
@@ -74,7 +74,7 @@ resource "aws_autoscaling_group" "blue" {
 
 resource "aws_autoscaling_group" "green" {
   name                = "green-asg"
-  vpc_zone_identifier = [aws_subnet.public.id]
+  vpc_zone_identifier = [data.terraform_remote_state.vpc_main.outputs.public_subnet_id]
   desired_capacity    = 1
   max_size            = 1
   min_size            = 1
