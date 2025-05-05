@@ -55,8 +55,9 @@ resource "aws_lb_listener_rule" "static" {
 
 ## Enhancements
 
-1. Environments
-2. Use tfvars
-3. Fix tfsec issues
-4. Add auto destroy (CI job?)
-5. Complete cloudwatch and budget resource
+1. Fix tfsec issues
+2. Add auto destroy (CI job?)
+3. Complete 
+   1. Environments
+   2. Cloudwatch and budget resource
+   3. Pipeline

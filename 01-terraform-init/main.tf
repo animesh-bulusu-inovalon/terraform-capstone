@@ -1,9 +1,13 @@
+// This file 
+//    creates the S3 bucket used for storing Terraform state files.
+//    defines an IAM policy granting minimal permissions for Terraform to access the S3 backend and lockfiles.
+
 resource "aws_s3_bucket" "terraform_state" {
   provider = aws
   bucket   = var.infra_bucket_name
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = true // Prevent accidental deletion of the bucket
   }
 }
 
@@ -36,6 +40,7 @@ resource "aws_iam_policy" "tf_s3_backend_policy" {
 resource "aws_s3_bucket_public_access_block" "terraform_state_block" {
   bucket = aws_s3_bucket.terraform_state.id
 
+  // Block all public access to the bucket for security
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -44,20 +49,20 @@ resource "aws_s3_bucket_public_access_block" "terraform_state_block" {
 
 resource "aws_s3_object" "_01_tf_init" {
   bucket = aws_s3_bucket.terraform_state.id
-  key    = "01-terraform-init/"
+  key    = "01-terraform-init/" // Folder placeholder for init layer state files
 }
 
 resource "aws_s3_object" "_02_networking" {
   bucket = aws_s3_bucket.terraform_state.id
-  key    = "02-networking/"
+  key    = "02-networking/" // Folder placeholder for networking layer state files
 }
 
 resource "aws_s3_object" "_03_load_balancer" {
   bucket = aws_s3_bucket.terraform_state.id
-  key    = "03-load-balancer/"
+  key    = "03-load-balancer/" // Folder placeholder for load balancer layer state files
 }
 
 resource "aws_s3_object" "_04_instances" {
   bucket = aws_s3_bucket.terraform_state.id
-  key    = "04-instances/"
+  key    = "04-instances/" // Folder placeholder for compute layer state files
 }

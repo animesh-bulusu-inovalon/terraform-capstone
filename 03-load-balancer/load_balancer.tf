@@ -63,7 +63,7 @@ resource "aws_lb_listener" "front_end" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.green.arn
+    target_group_arn = aws_lb_target_group.green.arn // Default traffic goes to green target group
   }
 }
 

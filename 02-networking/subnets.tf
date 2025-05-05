@@ -1,3 +1,6 @@
+// Creates public and private subnets within the VPC, each in specified AZs.
+// The public subnet maps public IPs on launch to allow internet access.
+
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main_vpc.id
   cidr_block              = var.public_subnet_cidr_block

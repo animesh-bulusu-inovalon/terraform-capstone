@@ -1,3 +1,5 @@
+// Defines EC2 launch templates for blue and green instances used in a blue-green Zero Downtime Deployment.
+
 resource "aws_launch_template" "blue" {
   name_prefix   = "blue-"
   image_id      = var.ami_id
@@ -57,6 +59,9 @@ resource "aws_launch_template" "green" {
     create_before_destroy = true
   }
 }
+
+// Creates Auto Scaling Groups (ASGs) for blue and green launch templates to maintain desired capacity
+// Each ASG is attached to respective target groups for load balancing.
 
 resource "aws_autoscaling_group" "blue" {
   name                = "blue-asg"
