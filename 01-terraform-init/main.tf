@@ -47,12 +47,17 @@ resource "aws_s3_object" "_01_tf_init" {
   key    = "01-terraform-init/"
 }
 
-resource "aws_s3_object" "_02_vpc" {
-    bucket = aws_s3_bucket.terraform_state.id
-    key = "02-vpc/"    
+resource "aws_s3_object" "_02_networking" {
+  bucket = aws_s3_bucket.terraform_state.id
+  key    = "02-networking/"
 }
 
-resource "aws_s3_object" "_03_vm" {
-    bucket = aws_s3_bucket.terraform_state.id
-    key = "03-vm/"    
+resource "aws_s3_object" "_03_load_balancer" {
+  bucket = aws_s3_bucket.terraform_state.id
+  key    = "03-load-balancer/"
+}
+
+resource "aws_s3_object" "_04_instances" {
+  bucket = aws_s3_bucket.terraform_state.id
+  key    = "04-instances/"
 }
