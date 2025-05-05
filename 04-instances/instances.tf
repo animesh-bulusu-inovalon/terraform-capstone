@@ -42,7 +42,7 @@ resource "aws_launch_template" "green" {
     sudo apt-get install -y nginx
     sudo systemctl start nginx
     sudo systemctl enable nginx
-    echo "<h1>Blue Environment</h1>" | sudo tee /var/www/html/index.html
+    echo "<h1>Green Environment</h1>" | sudo tee /var/www/html/index.html
     EOF
   )
 
