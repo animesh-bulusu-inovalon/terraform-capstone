@@ -1,17 +1,18 @@
 resource "aws_launch_template" "blue" {
   name_prefix   = "blue-"
-  image_id      = "ami-02d0b04e8c50472ce"
-  instance_type = "t3.micro"
+  image_id      = var.ami_id
+  instance_type = var.instance_type
+  key_name      = var.key_name
 
   vpc_security_group_ids = [data.terraform_remote_state.networking_layer.outputs.instance_sg_id]
 
   user_data = base64encode(<<-EOF
     #!/bin/bash
-    apt-get update -y
-    apt-get install -y nginx
-    systemctl start nginx
-    systemctl enable nginx
-    echo "<h1>Blue Environment</h1>" > /var/www/html/index.html
+    sudo apt-get update -y
+    sudo apt-get install -y nginx
+    sudo systemctl start nginx
+    sudo systemctl enable nginx
+    echo "<h1>Blue Environment</h1>" | sudo tee /var/www/html/index.html
     EOF
   )
 
@@ -29,18 +30,19 @@ resource "aws_launch_template" "blue" {
 
 resource "aws_launch_template" "green" {
   name_prefix   = "green-"
-  image_id      = "ami-02d0b04e8c50472ce"
-  instance_type = "t3.micro"
+  image_id      = var.ami_id
+  instance_type = var.instance_type
+  key_name      = var.key_name
 
   vpc_security_group_ids = [data.terraform_remote_state.networking_layer.outputs.instance_sg_id]
 
   user_data = base64encode(<<-EOF
     #!/bin/bash
-    apt-get update -y
-    apt-get install -y nginx
-    systemctl start nginx
-    systemctl enable nginx
-    echo "<h1>Green Environment</h1>" > /var/www/html/index.html
+    sudo apt-get update -y
+    sudo apt-get install -y nginx
+    sudo systemctl start nginx
+    sudo systemctl enable nginx
+    echo "<h1>Blue Environment</h1>" | sudo tee /var/www/html/index.html
     EOF
   )
 
@@ -59,9 +61,9 @@ resource "aws_launch_template" "green" {
 resource "aws_autoscaling_group" "blue" {
   name                = "blue-asg"
   vpc_zone_identifier = [data.terraform_remote_state.networking_layer.outputs.public_subnet_id]
-  desired_capacity    = 1
-  max_size            = 1
-  min_size            = 1
+  desired_capacity    = var.desired_capacity
+  max_size            = var.max_size
+  min_size            = var.min_size
 
   launch_template {
     id      = aws_launch_template.blue.id
@@ -71,7 +73,7 @@ resource "aws_autoscaling_group" "blue" {
   target_group_arns = [data.terraform_remote_state.alb_layer.outputs.blue_target_group_arn]
 
   health_check_type         = "ELB"
-  health_check_grace_period = 300
+  health_check_grace_period = 600
 
   tag {
     key                 = "Name"
@@ -83,9 +85,9 @@ resource "aws_autoscaling_group" "blue" {
 resource "aws_autoscaling_group" "green" {
   name                = "green-asg"
   vpc_zone_identifier = [data.terraform_remote_state.networking_layer.outputs.public_subnet_id]
-  desired_capacity    = 1
-  max_size            = 1
-  min_size            = 1
+  desired_capacity    = var.desired_capacity
+  max_size            = var.max_size
+  min_size            = var.min_size
 
   launch_template {
     id      = aws_launch_template.green.id
@@ -95,7 +97,7 @@ resource "aws_autoscaling_group" "green" {
   target_group_arns = [data.terraform_remote_state.alb_layer.outputs.green_target_group_arn]
 
   health_check_type         = "ELB"
-  health_check_grace_period = 300
+  health_check_grace_period = 600
 
   tag {
     key                 = "Name"
