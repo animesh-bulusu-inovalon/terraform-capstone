@@ -1,5 +1,5 @@
 resource "aws_lb" "main" {
-  name               = "main-alb"
+  name               = var.alb_name
   internal           = false
   load_balancer_type = "application"
   security_groups    = [data.terraform_remote_state.networking_layer.outputs.alb_sg_id]
@@ -13,7 +13,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "blue" {
-  name     = "blue-tg"
+  name     = var.blue_target_group_name
   port     = 80
   protocol = "HTTP"
   vpc_id   = data.terraform_remote_state.networking_layer.outputs.vpc_id
@@ -35,19 +35,19 @@ resource "aws_lb_target_group" "blue" {
 }
 
 resource "aws_lb_target_group" "green" {
-  name     = "green-tg"
+  name     = var.green_target_group_name
   port     = 80
   protocol = "HTTP"
   vpc_id   = data.terraform_remote_state.networking_layer.outputs.vpc_id
 
   health_check {
     enabled             = true
-    interval            = 30
-    path                = "/"
+    interval            = var.health_check_interval
+    path                = var.health_check_path
     port                = "traffic-port"
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
-    timeout             = 5
+    healthy_threshold   = var.healthy_threshold
+    unhealthy_threshold = var.unhealthy_threshold
+    timeout             = var.health_check_timeout
     matcher             = "200"
   }
 

@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "terraform_state" {
   provider = aws
-  bucket   = "animeshbulusu-infrastatefiles-apr2025-02"
+  bucket   = var.infra_bucket_name
 
   lifecycle {
     prevent_destroy = true

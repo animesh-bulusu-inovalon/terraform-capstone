@@ -52,3 +52,11 @@ resource "aws_lb_listener_rule" "static" {
 
 ![After - green in use](AFTER-2025-05-05-215021_1657x1440_scrot.png)
 
+
+## Enhancements
+
+1. Environments
+2. Use tfvars
+3. Fix tfsec issues
+4. Add auto destroy (CI job?)
+5. Complete cloudwatch and budget resource
